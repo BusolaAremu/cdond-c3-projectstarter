@@ -63,6 +63,33 @@ jobs:
             npm install
             npm run test
 
+  scan-frontend:
+    <<: *dockerImage
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [frontend-test]
+      - run:
+          name: front-end test
+          command: |
+            cd frontend
+            npm install
+            npm install oauth-sign@^0.9.0
+            npm audit --audit-level=critical
+
+  scan-backend:
+    <<: *dockerImage
+    steps:
+      - checkout
+      - restore_cache:
+          keys: [backend-test]
+      - run:
+          name: back-end test
+          command: |
+            cd backend
+            npm install
+            npm install oauth-sign@^0.9.0
+            npm audit --audit-level=critical
 
 
 workflows:
@@ -74,6 +101,10 @@ workflows:
           requires: [build-frontend]
       - test-backend:
           requires: [build-backend]
+      - scan-backend:
+          requires: [build-backend]
+      - scan-frontend:
+          requires: [build-frontend]
 
 
 
