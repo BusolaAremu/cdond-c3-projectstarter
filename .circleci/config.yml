@@ -6,9 +6,6 @@ defaults: &dockerImage
   docker:
     - image: circleci/node:13.8.0
 
-defaults: &dockerImageCli
-  docker:
-    - image: amazon/aws-cli
 
 
 jobs:
@@ -123,7 +120,8 @@ jobs:
           template: basic_fail_1
 
   deploy-infrastructure:
-    <<: *dockerImage
+    docker:
+    - image: amazon/aws-cli
     steps:
       # Checkout code from git
       - run:
