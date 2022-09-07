@@ -149,12 +149,12 @@ jobs:
             aws ec2 describe-instances \
             --query "Reservations[*].Instances[*].[PublicIpAddress]" \
             --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-            --output text >> ~/project/.circleci/ansible/inventory.txt
-            cat ~/project/.circleci/ansible/inventory.txt
+            --output text >> ~/cdond-c3-projectstarter/.circleci/ansible/inventory.txt
+            cat ~/cdond-c3-projectstarter/.circleci/ansible/inventory.txt
       - persist_to_workspace:
           root: ~/
           paths:
-            - project/.circleci/ansible/inventory.txt 
+            - cdond-c3-projectstarter/.circleci/ansible/inventory.txt 
 
       - persist_to_workspace:
           root: ~/
@@ -383,12 +383,22 @@ jobs:
   #     - run:
   #         name: Install dependencies
   #         command: |
-  #           yum install tar gzip -y
-  #     - run:
-  #         name: Get Old stack workflow Id
-  #         command: |
-  #           export OldWorkFLowID=$(aws cloudformation \
-              #list-exports --query "Exports")
+  # #           yum install tar gzip -y
+  # #     - run:
+  # #         name: Get Old stack workflow Id
+  # #         command: |
+  # #           export OldWorkFLowID=$(aws cloudformation \
+  #             #list-exports --query "Exports[?Name==\`WorkflowID\`].value" \
+  #             --no-paginate --output text | grep -o '[^-]*$' )
+  #             echo $OldWorkflowID >> ~/cdond-c3-projectstarter/OldWorkFlowId.txt
+  #             cat ~/cdond-c3-projectstarter/OldWorkFlowID.txt 
+  #         - persist_to_workspace:
+  #           root: ~/
+  #           paths:
+  # #             - cdond-c3-projectstarter/OldWorkflowID.txt
+  #           -run:
+  #             name: Update Cloudfront distrinution
+
   #     # Here's where you will add some code to rollback on failure  
 
 # cleanup:
