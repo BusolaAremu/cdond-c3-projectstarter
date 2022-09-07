@@ -144,20 +144,22 @@ jobs:
               --tags project=udapeople
 
       - run:
-          name: Add back-end ip to ansible inventory; Add the created EC2 instance public IP to the ansible inventory file
+          name: Add back-end ip to ansible inventory
           command: |
             aws ec2 describe-instances \
-              --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
-              --query "Reservations[*].Instances[*].PublicIpAddress" \
-              --output text >> .circleci/ansible/inventory.txt \
-              --region us-east-1
-            cat .circleci/ansible/inventory.txt
-            echo CIRCLE_WORKFLOW_ID=${CIRCLE_WORKFLOW_ID:0:7}
+            --query "Reservations[*].Instances[*].[PublicIpAddress]" \
+            --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}" \
+            --output text >> ~/project/.circleci/ansible/inventory.txt
+            cat ~/project/.circleci/ansible/inventory.txt
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/.circleci/ansible/inventory.txt 
 
       - persist_to_workspace:
-          root: ~/cdond-c3-projectstarter
+          root: ~/
           paths:
-            -  .circleci/ansible/inventory.txt 
+            -  cdond-c3-projectstarter/.circleci/ansible/inventory.txt 
         # Here's where you will add some code to rollback on failure
       # - destroy-enviroment:
       #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
@@ -175,7 +177,7 @@ jobs:
               - fa:83:4c:5e:0d:90:bd:4f:02:2a:0d:ba:21:7a:28:a2 
       # attach workspace
       - attach_workspace:
-            at: ~/cdond-c3-projectstarter
+            at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -375,17 +377,18 @@ jobs:
 
   # cloudfront-update:
   #   docker:
-  #     # Docker image here that supports AWS CLI
+  #     - image: amazon/aws-cli
   #   steps:
-  #     # Checkout code from git
+  #     - checkout
   #     - run:
   #         name: Install dependencies
   #         command: |
-  #           # your code here
+  #           yum install tar gzip -y
   #     - run:
-  #         name: Update cloudfront distribution
+  #         name: Get Old stack workflow Id
   #         command: |
-  #           # your code here
+  #           export OldWorkFLowID=$(aws cloudformation \
+              #list-exports --query "Exports")
   #     # Here's where you will add some code to rollback on failure  
 
 # cleanup:
