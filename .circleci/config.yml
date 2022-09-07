@@ -175,7 +175,7 @@ jobs:
               - fa:83:4c:5e:0d:90:bd:4f:02:2a:0d:ba:21:7a:28:a2 
       # attach workspace
       - attach_workspace:
-            at: ~/
+            at: ~/cdond-c3-projectstarter
       - run:
           name: Install dependencies
           command: |
@@ -185,6 +185,7 @@ jobs:
           command: |
             pwd
             cd .circleci/ansible
+            cat .circleci/ansible/inventory.txt 
             ls -al 
             ansible-playbook -i inventory.txt configure-server.yml
           no_output_timeout: 30m
@@ -320,38 +321,48 @@ jobs:
   #     # - revert-migrations:
   #         # workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
 
-#   smoke-test:
-#     docker:
-#       - image: python:3.10-alpine3.16
-#     steps:
-#       - checkout
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             apk add --update --no-cache tar gzip node.js npm curl aws-cli
-#       - run:
-#           name: Get backend url
-#           command: |
-#             export BACKEND_IP=$(aws ec2 describe-instances \
-#             --query "Reservations[*].[PublicIpAddress]" \
-#             --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}"  \
-#             --output text)
-#             echo ${BACKEND_IP}
-#             
+  # smoke-test:
+  #   docker:
+  #     - image: python:3.10-alpine3.16
+  #   steps:
+  #     - checkout
+  #     - run:
+  #         name: Install dependencies
+  #         command: |
+  #           apk add --update --no-cache tar gzip node.js npm curl aws-cli
+  #     - run:
+  #         name: Get backend url
+  #         command: |
+  #           export BACKEND_IP=$(aws ec2 describe-instances \
+  #           --query "Reservations[*].[PublicIpAddress]" \
+  #           --filters "Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7}"  \
+  #           --output text)
+  #           echo ${BACKEND_IP}
 
-              # export BACKEND_IP=$(echo $BACKEND_IP | grep -o '[^ ]*$')
+  #           export BACKEND_IP=$(echo $BACKEND_IP | grep -o '[^ ]*$')
+             
+  #            echo $BACKEND
+  #            export API_URL="http://${BACKEND_IP}:3030"
+  #            echo "API_URL=${API_URL}"
 
-              # echo $BACKEND
-              
-#       - run:
-#           name: Backend smoke test.
-#           command: |
-#             # your code here
-#       - run:
-#           name: Frontend smoke test.
-#           command: |
-#             # your code here
-#       # Here's where you will add some code to rollback on failure  
+  #           echo "Sleeping for 1 minute"
+  #           sleep 60
+
+  #           if curl -v "${API_URL}/api/status" | grep "ok"
+  #           then
+  #             return 0
+  #           else
+  #             return 1
+  #           fi
+  #     - run:
+  #         name: Backend smoke test.
+  #         command: |
+  #           # your code here
+  #     - run:
+  #         name: Frontend smoke test.
+  #         command: |
+  #           URL=""
+  #     # Here's where you will add some code to rollback on failure  
 
 #   cloudfront-update:
 #     docker:
