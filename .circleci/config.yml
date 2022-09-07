@@ -339,9 +339,9 @@ jobs:
 #             echo ${BACKEND_IP}
 #             
 
-              export BACKEND_IP=$(echo $BACKEND_IP | grep -o '[^ ]*$')
+              # export BACKEND_IP=$(echo $BACKEND_IP | grep -o '[^ ]*$')
 
-              echo $BACKEND
+              # echo $BACKEND
               
 #       - run:
 #           name: Backend smoke test.
