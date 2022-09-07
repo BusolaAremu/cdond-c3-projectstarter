@@ -193,7 +193,8 @@ jobs:
       #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   run-migrations:
-    <<: *dockerImage
+    docker:
+      - image: circleci/node:13.8.0
       # Docker image here that supports NodeJS
     steps:
       - checkout
