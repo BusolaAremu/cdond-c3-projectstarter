@@ -402,11 +402,11 @@ jobs:
       - run:
           name: Get Old stack workflow Id
           command: |
-            export OldWorkFLowID=$(aws cloudformation \
-              #list-exports --query "Exports[?Name==\`WorkflowID\`].value" \
+            export OldWorkfLowID=$(aws cloudformation \
+              list-exports --query "Exports[?Name==\`WorkflowID\`].Value" \
               --no-paginate --output text | grep -o '[^-]*$' )
-            echo $OldWorkflowID >> ~/cdond-c3-projectstarter/OldWorkFlowId.txt
-            cat ~/project/OldWorkFlowID.txt 
+            echo $OldWorkflowID >> ~/project/OldWorkflowId.txt
+            cat ~/project/OldWorkflowID.txt 
       - persist_to_workspace:
           root: ~/
           paths:
@@ -419,7 +419,7 @@ jobs:
               --stack-name InitialStack \
               --parameter-overides WorkflowID=udapeople-${CIRCLE_WORKFLOW_ID:0:7}" \
               --tags project=udapeople 
-            echo OldWorkflowID: $(cat ~/project/OldWorkFlowID.txt)
+            echo OldWorkflowID: $(cat ~/project/OldWorkflowID.txt)
             echo CurrentWorkflowID: "${CIRCLE_WORKFLOW_ID:0:7}"
       - destroy-environment:
           workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
