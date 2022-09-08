@@ -249,8 +249,11 @@ jobs:
           name: Run migrations
           command: |
             cd backend
+            echo "i ran till this point1"
             sudo npm install npm
+            echo "I ran till this point2"
             npm run migrations > migrations_dump.txt
+            echo "I ran till this point3"
             cat migrations_dump.txt
       - run:
           name: Send migration results to kvdb.io
