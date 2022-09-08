@@ -386,9 +386,9 @@ jobs:
             echo $OldWorkflowID >> ~/cdond-c3-projectstarter/OldWorkFlowId.txt
             cat ~/cdond-c3-projectstarter/OldWorkFlowID.txt 
       - persist_to_workspace:
-        root: ~/
-        paths:
-          - cdond-c3-projectstarter/OldWorkflowID.txt
+          root: ~/
+          paths:
+            - cdond-c3-projectstarter/OldWorkflowID.txt
       - run:
           name: Update Cloudfront distribution
           command: |
@@ -414,7 +414,7 @@ cleanup:
       - run:
           name: Get old stack workflow id
           command: |
-             export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName"\
+            export STACKS=($(aws cloudformation list-stacks --query "StackSummaries[*].StackName"\
               --stack-status-filter CREATE_COMPLETE --no-paginate --output text))
             echo Stack names: "${STACKS[@]}"
             cat ~/cdond-c3-projectstarter/OldWorkFlowID.txt
@@ -426,15 +426,16 @@ cleanup:
           command: |
           export OldWorkFLowID=$(cat ~/cdond-c3-projectstarter/OldWorkflowID.txt)
  
-          if [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
-            then
-              echo "Deleting old stack"
-              echo "s3://udapeople-${OldWorkflowID}"
-              aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive || true
-              aws cloudformation delet-stack --stack-name "udapeople-backend-${OldWorkflowID} || true"
-              aws cloudformation delet-stack --stack-name "udapeople-frontend-${OldWorkflowID} || true"              
-         else
-              echo "Stack is the latest"
+          if 
+            [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
+          then
+            echo "Deleting old stack"
+            echo "s3://udapeople-${OldWorkflowID}"
+            aws s3 rm "s3://udapeople-${OldWorkflowID}" --recursive || true
+            aws cloudformation delet-stack --stack-name "udapeople-backend-${OldWorkflowID} || true"
+            aws cloudformation delet-stack --stack-name "udapeople-frontend-${OldWorkflowID} || true"              
+          else
+            echo "Stack is the latest"
          fi
 
 
