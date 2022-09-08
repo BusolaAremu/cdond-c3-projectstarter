@@ -233,7 +233,7 @@ jobs:
           command: |
             cd backend
             echo "i ran till this point1"
-            npm install -g npm
+            sudo npm install -g npm
             echo "I ran till this point2"
             npm run migrations > migrations_dump.txt
             echo "I ran till this point3"
