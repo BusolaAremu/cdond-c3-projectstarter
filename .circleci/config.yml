@@ -177,21 +177,6 @@ jobs:
               --stack-name "udapeople-frontend-${CIRCLE_WORKFLOW_ID:0:7}" \
               --parameter-overrides ID="${CIRCLE_WORKFLOW_ID:0:7}"  \
               --tags project=udapeople
-      # - run:
-      #     name: Add back-end ip to ansible inventory
-      #     command: |
-      #       cd .circleci/ansible
-      #       cat inventory.txt
-      #       aws ec2 describe-instances \
-      #       --query 'Reservations[*].Instances[*].PublicIpAddress' \
-      #       --output text --filter Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7} >> inventory.txt
-      #       cat inventory.txt
-
-      # - persist_to_workspace:
-      #     root: ~/
-      #     paths:
-      #       -  cdond-c3-projectstarter/.circleci/ansible/inventory.txt 
-        
       - run:
           name: Add back-end ip to ansible inventory
           command: |
@@ -205,9 +190,8 @@ jobs:
           root: ~/
           paths:
             - project/.circleci/ansible/inventory.txt 
-
-      # - destroy-environment:
-      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   configure-infrastructure:
     docker:
@@ -233,9 +217,8 @@ jobs:
             ls -al 
             ansible-playbook -i inventory.txt configure-server.yml
           no_output_timeout: 30m
-      # Here's where you will add some code to rollback on failure
-      # - destroy-environment:
-      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   run-migrations:
     docker:
@@ -250,7 +233,7 @@ jobs:
           command: |
             cd backend
             echo "i ran till this point1"
-            sudo npm install npm
+            npm install -g npm
             echo "I ran till this point2"
             npm run migrations > migrations_dump.txt
             echo "I ran till this point3"
@@ -262,8 +245,8 @@ jobs:
               then
                  curl https://kvdb.io/M4uDhia8xdV11GFNSeoWh1/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
               fi
-      # - destroy-environment:
-      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}     
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}     
 
   deploy-frontend:
     docker:
@@ -300,12 +283,10 @@ jobs:
             npm build 
             tar -czvf artifact-"${CIRCLE_WORKFLOW_ID:0:7".tar.gz dist 
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID:0:7} --recursive
-
-      # Here's where you will add some code to rollback on failure
-      # - destroy-environment:
-      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-      # - revert-migrations:
-          # workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}      
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}      
                     
   deploy-backend:
     configure-infrastructure:
@@ -356,11 +337,10 @@ jobs:
             cat inventory.txt
             ansible-playbook -i inventory.txt deploy-backend.yml
 
-      # Here's where you will add some code to rolln on failure  
-      # - destroy-environment:
-      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-      # - revert-migrations:
-          # workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
 
   smoke-test:
     docker:
@@ -407,11 +387,10 @@ jobs:
               else
                 return 1
               fi
-    # Here's where you will add some code to rollback on failure 
-      # - destroy-environment:
-      #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
-      # - revert-migrations:
-          # workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
 
   cloudfront-update:
     docker:
@@ -444,8 +423,10 @@ jobs:
               --tags project=udapeople 
             echo OldWorkflowID: $(cat ~/cdond-c3-projectstarter/OldWorkFlowID.txt)
             echo CurrentWorkflowID: "${CIRCLE_WORKFLOW_ID:0:7}"
-
-      # Here's where you will add some code to rollback on failure  
+      - destroy-environment:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
+      - revert-migrations:
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7} 
 
   cleanup:
       docker:
