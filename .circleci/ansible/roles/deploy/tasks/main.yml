@@ -44,7 +44,7 @@
 
 - name: "Start app"
   become: true
-  shell:
+  shell: |
     cd /home/ubuntu/backend_app_dir
     tar xzvf artifact.tar.gz
     npm install
