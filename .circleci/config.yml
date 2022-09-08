@@ -151,12 +151,15 @@ jobs:
             --output text --filter Name=tag:Name,Values=backend-${CIRCLE_WORKFLOW_ID:0:7} >> inventory.txt
             echo backend-${CIRCLE_WORKFLOW_ID:0:7}
             cat inventory.txt
+            cat .circleci/ansible/inventory.txt
+            cat .cdond-c3-projectstarter/ansible/inventory.txt
+
 
       - persist_to_workspace:
           root: ~/
           paths:
             -  .circleci/ansible/inventory.txt 
-        # Here's where you will add some code to rollback on failure
+        
       # - destroy-enviroment:
       #     workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
