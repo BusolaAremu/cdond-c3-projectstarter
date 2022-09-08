@@ -246,7 +246,7 @@ jobs:
                  curl --insecure https://kvdb.io/M4uDhia8xdV11GFNSeoWh1/migration_${CIRCLE_WORKFLOW_ID:0:7} -d '1'
               fi
       - destroy-environment:
-          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}     
+          workflow_id: ${CIRCLE_WORKFLOW_ID:0:7}
 
   deploy-frontend:
     docker:
@@ -260,7 +260,7 @@ jobs:
           command: |
             apk add --update --no-cache tar
             apk add --update --no-cache gzip
-            apk add --update --no-cache node.js
+            apk add --update --no-cache nodejs
             apk add --update --no-cache npm
             apk add --update --no-cache aws-cli
             apk add --update --no-cache curl
