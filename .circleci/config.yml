@@ -231,11 +231,8 @@ jobs:
           name: Run migrations
           command: |
             cd backend
-            echo "i ran till this point1"
             sudo npm install -g npm
-            echo "I ran till this point2"
             npm run migrations > migrations_dump.txt
-            echo "I ran till this point3"
             cat migrations_dump.txt
       - run:
           name: Send migration results to kvdb.io
@@ -307,7 +304,6 @@ jobs:
           command: |
             pwd
             cd backend
-            echo "i ran till this point1"
             touch .env
             echo ENVIRONMENT=production > ".env"
             echo TYPEORM_CONNECTION=postgres >> ".env"
@@ -321,7 +317,6 @@ jobs:
             echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> ".env"
             echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> ".env"
             
-            echo "I ran till this point2"
             pwd
             ls -al
             npm install
@@ -448,8 +443,8 @@ jobs:
       - run:
           name: Remove old stacks and files
           command: |
-            export OldWorkFLowID=$(cat ~/cdond-c3-projectstarter/OldWorkflowID.txt)
-   
+            export OldWorkflowID=$(cat ~/project/OldWorkflowID.txt)
+
             if 
               [[ "${CIRCLE_WORKFLOW_ID:0:7}" != "${OldWorkflowID}" ]]
             then
