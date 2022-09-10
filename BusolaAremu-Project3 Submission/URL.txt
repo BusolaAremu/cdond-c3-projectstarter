@@ -2,4 +2,4 @@ URL01
 https://github.com/BusolaAremu/cdond-c3-projectstarter.git
 
 URL02
-http://udapeople-cb39eb6.s3-website-us-east-1.amazonaws.com
+http://udapeople-7354517.s3-website-us-east-1.amazonaws.com/
